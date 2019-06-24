@@ -6,6 +6,8 @@ const secret = process.env.secret
 const tokenKey = process.env.tokenKey
 const tokenSecret = process.env.tokenSecret
 
+const args = process.argv.slice(2)
+
   ; (async () => {
   const api = new LiveApi({
     key: key, // publicKey
@@ -15,10 +17,19 @@ const tokenSecret = process.env.tokenSecret
   })
 
   const devices = await api.listDevices()
-  // console.log(devices);
 
-  const ids = devices.map(x => api.onOffDevice(x.id, x.state === 2 ? 'On' : null))
+  let ids
+
+  if (args[0] === 'on') {
+    console.log('Turning the lights on')
+    ids = devices.map(x => api.onOffDevice(x.id, 'On'))
+  } else if (args[0] === 'off') {
+    console.log('Turning the lights off')
+    ids = devices.map(x => api.onOffDevice(x.id, null))
+  } else {
+    console.log('Switching the lights')
+    ids = devices.map(x => api.onOffDevice(x.id, x.state === 2 ? 'On' : null))
+  }
 
   await Promise.all(ids)
-  // console.log(result)
 })()
