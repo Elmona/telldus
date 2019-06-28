@@ -5,6 +5,7 @@ const key = process.env.key
 const secret = process.env.secret
 const tokenKey = process.env.tokenKey
 const tokenSecret = process.env.tokenSecret
+let ids
 
 const args = process.argv.slice(2)
 
@@ -17,8 +18,6 @@ const args = process.argv.slice(2)
   })
 
   const devices = await api.listDevices()
-
-  let ids
 
   if (args[0] === 'on') {
     console.log('Turning the lights on')
